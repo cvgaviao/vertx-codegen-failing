@@ -1,73 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>vertx-codegen-failing</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>vertx-codegen-failing</name>
+	<groupId>org.example</groupId>
+	<artifactId>vertx-codegen-failing</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>vertx-codegen-failing</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <vertx-version>4.0.0-SNAPSHOT</vertx-version>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<vertx-version>4.0.0-SNAPSHOT</vertx-version>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-codegen</artifactId>
-            <version>${vertx-version}</version>
-            <scope>provided</scope>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-codegen</artifactId>
+			<version>${vertx-version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
-            <version>${vertx-version}</version>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-core</artifactId>
+			<version>${vertx-version}</version>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
-                    <configuration >
-                        <verbose>true</verbose>
-                        <showWarnings>true</showWarnings>
-                        <debug>true</debug>
-                        <compilerArgs
-                            combine.children="append">
-                            <arg>-verbose</arg>
-                            <arg>-Xlint:all,-options,-path</arg>
-                        </compilerArgs>
-                        <annotationProcessorPaths combine.children="append">
-                            <path>
-                                <groupId>io.vertx</groupId>
-                                <artifactId>vertx-codegen</artifactId>
-                                <version>${vertx-version}</version>
-                                <classifier>processor</classifier>
-                            </path>
-                        </annotationProcessorPaths>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+<!-- 						<verbose>true</verbose> -->
+						<!-- <optimize>true</optimize> -->
+						<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+						<!-- <showWarnings>true</showWarnings> -->
+<!-- 						<debug>true</debug> -->
+<!-- 						<fork>true</fork> -->
+<!-- 						<compilerArgs combine.children="append"> -->
+<!-- 							<compilerArg>-J-verbose</compilerArg> -->
+<!-- 							<compilerArg>${enableDebugAnnotationCompilerArg}</compilerArg> -->
+<!-- 						</compilerArgs> -->
+<!-- 						<forceJavacCompilerUse>true</forceJavacCompilerUse> -->
+						<annotationProcessorPaths
+							combine.children="append">
+							<path>
+								<groupId>io.vertx</groupId>
+								<artifactId>vertx-codegen</artifactId>
+								<version>${vertx-version}</version>
+								<classifier>processor</classifier>
+							</path>
+						</annotationProcessorPaths>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
-    <repositories>
-        <repository>
-            <id>oss-sonatype</id>
-            <name>oss-sonatype</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+	<profiles>
+		<profile>
+			<id>debugAnnotation</id>
+			<properties>
+				<enableDebugAnnotationCompilerArg>-J-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=1044</enableDebugAnnotationCompilerArg>
+			</properties>
+
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<artifactId>maven-compiler-plugin</artifactId>
+							<version>3.8.1</version>
+							<configuration>
+								<verbose>true</verbose>
+								<useIncrementalCompilation>false</useIncrementalCompilation>
+								<showWarnings>true</showWarnings>
+								<debug>true</debug>
+								<fork>true</fork>
+								<compilerArgs combine.children="append">
+									<compilerArg>-J-verbose</compilerArg>
+									<compilerArg>${enableDebugAnnotationCompilerArg}</compilerArg>
+								</compilerArgs>
+								<forceJavacCompilerUse>true</forceJavacCompilerUse>
+								<annotationProcessorPaths
+									combine.children="append">
+									<path>
+										<groupId>io.vertx</groupId>
+										<artifactId>vertx-codegen</artifactId>
+										<version>${vertx-version}</version>
+										<classifier>processor</classifier>
+									</path>
+								</annotationProcessorPaths>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<repository>
+			<id>oss-sonatype</id>
+			<name>oss-sonatype</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
